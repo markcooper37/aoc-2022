@@ -1,1 +1,3 @@
-# aoc-2022
+# Advent of Code 2022
+
+My solutions to the Advent of Code 2020 problems using Go.
