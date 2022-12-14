@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	rocks, err := readRocks("test_data.txt")
+	rocks, err := readRocks("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
