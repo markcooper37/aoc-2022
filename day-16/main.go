@@ -15,7 +15,7 @@ type Valve struct {
 }
 
 func main() {
-	valves, err := readValves("test_data.txt")
+	valves, err := readValves("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -140,6 +140,7 @@ func partTwo(valves map[string]Valve) int {
 	maxFlow := 0
 	for name1, distance1 := range valveDistances["AA"] {
 		for name2, distance2 := range valveDistances["AA"] {
+			fmt.Println(name1, name2)
 			if name1 == name2 {
 				continue
 			}
@@ -156,7 +157,7 @@ func partTwo(valves map[string]Valve) int {
 func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, time2, totalFlow, time, target int, valveDistances map[string]map[string]int, valves map[string]Valve) int {
 	minimum := min([]int{time1, time2})
 	time -= minimum
-	if time == 0 {
+	if time <= 0 {
 		return totalFlow
 	}
 	time1 -= minimum
@@ -177,6 +178,18 @@ func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, tim
 			newTotalFlow += time * valves[dest2].Rate
 			newFlowsTurnedOn[dest2] = true
 		}
+	}
+	maxRemaining := 0
+	for name := range valveDistances[dest1] {
+		if !newFlowsTurnedOn[name] {
+			maxRemaining += time*valves[name].Rate
+		}
+	}
+	if !newFlowsTurnedOn[dest1] {
+		maxRemaining += time*valves[dest1].Rate
+	}
+	if newTotalFlow + maxRemaining < target {
+		return newTotalFlow
 	}
 	maxFlow := newTotalFlow
 	if time1 == 0 && time2 == 0 {
