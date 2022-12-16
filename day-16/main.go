@@ -140,12 +140,11 @@ func partTwo(valves map[string]Valve) int {
 	maxFlow := 0
 	for name1, distance1 := range valveDistances["AA"] {
 		for name2, distance2 := range valveDistances["AA"] {
-			fmt.Println(name1, name2)
 			if name1 == name2 {
 				continue
 			}
 			flowsTurnedOn := map[string]bool{}
-			flow := findMaxFlow2(flowsTurnedOn, name1, name2, distance1, distance2, 0, 26, maxFlow, valveDistances, valves)
+			flow := findMaxFlow(flowsTurnedOn, name1, name2, distance1, distance2, 0, 26, maxFlow, valveDistances, valves)
 			if flow > maxFlow {
 				maxFlow = flow
 			}
@@ -154,7 +153,7 @@ func partTwo(valves map[string]Valve) int {
 	return maxFlow
 }
 
-func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, time2, totalFlow, time, target int, valveDistances map[string]map[string]int, valves map[string]Valve) int {
+func findMaxFlow(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, time2, totalFlow, time, target int, valveDistances map[string]map[string]int, valves map[string]Valve) int {
 	minimum := min([]int{time1, time2})
 	time -= minimum
 	if time <= 0 {
@@ -197,7 +196,7 @@ func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, tim
 			if !newFlowsTurnedOn[name1] {
 				for name2, distance2 := range valveDistances[dest2] {
 					if !newFlowsTurnedOn[name2] {
-						flow := findMaxFlow2(newFlowsTurnedOn, name1, name2, distance1, distance2, newTotalFlow, time, target, valveDistances, valves)
+						flow := findMaxFlow(newFlowsTurnedOn, name1, name2, distance1, distance2, newTotalFlow, time, target, valveDistances, valves)
 						if flow > maxFlow {
 							maxFlow = flow
 						}
@@ -208,7 +207,7 @@ func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, tim
 	} else if time1 == 0 && time2 > 0 {
 		for name, distance := range valveDistances[dest1] {
 			if !newFlowsTurnedOn[name] {
-				flow := findMaxFlow2(newFlowsTurnedOn, name, dest2, distance, time2, newTotalFlow, time, target, valveDistances, valves)
+				flow := findMaxFlow(newFlowsTurnedOn, name, dest2, distance, time2, newTotalFlow, time, target, valveDistances, valves)
 				if flow > maxFlow {
 					maxFlow = flow
 				}
@@ -217,14 +216,14 @@ func findMaxFlow2(flowsTurnedOn map[string]bool, dest1, dest2 string, time1, tim
 	} else if time1 > 0 && time2 == 0 {
 		for name, distance := range valveDistances[dest2] {
 			if !newFlowsTurnedOn[name] {
-				flow := findMaxFlow2(newFlowsTurnedOn, dest1, name, time1, distance, newTotalFlow, time, target, valveDistances, valves)
+				flow := findMaxFlow(newFlowsTurnedOn, dest1, name, time1, distance, newTotalFlow, time, target, valveDistances, valves)
 				if flow > maxFlow {
 					maxFlow = flow
 				}
 			}
 		}
 	} else {
-		flow := findMaxFlow2(newFlowsTurnedOn, dest1, dest2, time1, time2, newTotalFlow, time, target, valveDistances, valves)
+		flow := findMaxFlow(newFlowsTurnedOn, dest1, dest2, time1, time2, newTotalFlow, time, target, valveDistances, valves)
 		if flow > maxFlow {
 			maxFlow = flow
 		}
