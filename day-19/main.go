@@ -291,6 +291,9 @@ func readBlueprints(fileName string) ([]Blueprint, error) {
 		blueprint := Blueprint{OreRobotOreReq: values[0], ClayRobotOreReq: values[1], ObsidianRobotOreReq: values[2], ObsidianRobotClayReq: values[3], GeodeRobotOreReq: values[4], GeodeRobotObsidianReq: values[5]}
 		blueprints = append(blueprints, blueprint)
 	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
 
 	return blueprints, nil
 }

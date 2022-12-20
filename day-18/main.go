@@ -162,6 +162,9 @@ func readCubes(fileName string) (map[[3]int]bool, error) {
 		}
 		cubes[cube] = true
 	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
 
 	return cubes, nil
 }
